@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Gift Gallery</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fdd835, #e040fb); /* Warm and inviting gradient */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Align items from the top */
+            min-height: 100vh;
+            margin: 0;
+            color: #fff;
+            overflow-x: hidden; /* Prevent horizontal scrollbar */
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px 30px;
+            border-radius: 10px;
+            margin-top: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            max-width: 1200px;
+            width: 95%;
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Subtle animation for the body background */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body {
+            background-size: 200% 200%;
+            animation: gradientAnimation 10s ease infinite;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🏡 Delightful Home Gifts! 🎁</h1>
+        <p style="font-size: 1.1em; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);">Discover perfect gifts to bring warmth and joy to any home.</p>
+    </header>
+    <div class="gallery" id="gallery"></div>
+
+    <script>
+        const images = [
+            "https://cdn.moolwan.com/4adeec30-c254-43b5-8a18-60e687a67e8e.webp",
+            "https://assets.winni.in/product/primary/2014/6/33326.jpeg?dpr=2&w=220",
+            "https://m.media-amazon.com/images/I/818gyfjYmZL.jpg",
+            "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/24714702/236676_03_From_brilliant_to_basic_here_are_our_smart_home_setups_SHaddad.jpg?quality=90&strip=all&crop=16.666666666667,0,66.666666666667,100",
+            "https://m.media-amazon.com/images/I/51XvgmB+5gL._AC_UF1000,1000_QL80_.jpg",
+            "https://m.media-amazon.com/images/I/81hPUTOe6jL._AC_UF1000,1000_QL80_.jpg",
+            "https://coolbeds.in/cdn/shop/products/Screenshot2023-01-09131618.jpg?v=1738179824&width=1080",
+            "https://m.media-amazon.com/images/I/916zJa8442S._AC_UF1000,1000_QL80_.jpg",
+            "https://m.media-amazon.com/images/I/71XQFNQA+pL.jpg",
+            "https://m.media-amazon.com/images/I/710j2qRBsGL._AC_UF894,1000_QL80_.jpg",
+            "https://m.media-amazon.com/images/I/81y+HQZXP+L.jpg",
+            "https://cdn.shopify.com/s/files/1/2690/0106/files/IMG_9943banner_480x480.jpg?v=1708075896",
+            "https://tranceforme.in/wp-content/uploads/2023/10/1--DINNERWARE-1024x1024.jpg",
+            "https://m.media-amazon.com/images/I/91iBytoPZnL.jpg",
+            "https://m.media-amazon.com/images/I/71Xc-nniYyL.jpg",
+            "https://media.istockphoto.com/id/1134417394/photo/keychain-house-and-keys-with-red-ribbon-and-gift-box-on-white-wooden-background.jpg?s=612x612&w=0&k=20&c=L0Ulg4XztuxQWbhm4O5DnJi-maxNVF8s4NhhmbdWkZk=",
+            "https://www.kalpane.in/media/catalog/product/cache/213ef150b29400babbdbda2b5022e12e/1/_/1_copy_16.jpg",
+            "https://www.ikea.com/ext/ingkadam/m/6cecd8e442e35581/original/PE865615-crop001.jpg?f=s",
+            "https://rukminim2.flixcart.com/image/720/864/kv5kfww0/wall-decoration/8/o/l/housewarming-gift-ideas-designer-wooden-wall-hanging-sweet-home-original-imag843kxwfvstqu.jpeg?q=60&crop=false",
+            "https://www.jiomart.com/images/product/original/rvozqtfwzk/4k-4-korner-cute-romantic-couple-with-led-light-decorative-item-and-showpiece-for-home-decor-living-room-and-office-desk-gift-item-for-wedding-anniversary-and-birthday-size-20-x-14-cm-product-images-orvozqtfwzk-p604636830-4-202309190016.jpg?im=Resize=(1000,1000)",
+            "https://rukminim2.flixcart.com/image/750/900/kv5kfww0/wall-decoration/t/h/d/housewarming-gift-ideas-designer-wooden-wall-hanging-sweet-home-original-imag843kcbtmrjyv.jpeg?q=20&crop=false",
+            "https://media-api.xogrp.com/images/aae68452-e990-44e5-bbae-c2380f12bf4b~rs_768.h-cr_1.0.1588.1587"
+        ];
+
+        const gallery = document.getElementById("gallery");
+
+        images.forEach(src => {
+            const img = document.createElement("img");
+            img.src = src;
+            img.alt = "Home Gift"; // Added alt text for accessibility
+            gallery.appendChild(img);
+        });
+    </script>
+</body>
+</html>

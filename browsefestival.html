@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festival Gift Gallery</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffe082, #ffab91); /* Lighter festive gradient */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Align items from the top */
+            min-height: 100vh;
+            margin: 0;
+            color: #333; /* Darker text for better contrast on light background */
+            overflow-x: hidden; /* Prevent horizontal scrollbar */
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.8); /* Lighter header background */
+            padding: 20px 30px;
+            border-radius: 10px;
+            margin-top: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Softer shadow */
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Softer text shadow */
+            color: #e65100; /* A bright festive color for the title */
+        }
+
+        p {
+            color: #616161; /* Darker paragraph text */
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            max-width: 1200px;
+            width: 95%;
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.5); /* Lighter gallery background */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Softer shadow */
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Very subtle shadow */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15); /* Slightly more pronounced hover shadow */
+        }
+
+        /* Subtle animation for the body background */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body {
+            background-size: 200% 200%;
+            animation: gradientAnimation 10s ease infinite;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎉 Celebrate the Festive Season! 🎁</h1>
+        <p style="font-size: 1.1em; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">Explore wonderful gift ideas for every festival and celebration.</p>
+    </header>
+    <div class="gallery" id="gallery"></div>
+
+    <script>
+        const images = [
+            "https://kandoisweets.com/cdn/shop/files/dryfruit-sweets-box-2024-1.jpg?v=1728551362&width=720",
+            "https://m.media-amazon.com/images/I/71tXFPrw9hL.jpg",
+            "https://m.media-amazon.com/images/I/51WF19UROBL._AC_UF1000,1000_QL80_.jpg",
+            "https://5.imimg.com/data5/SELLER/Default/2023/7/323164883/QP/AF/UC/15389059/whatsapp-image-2023-07-07-at-10-24-54.jpeg",
+            "https://assets.isu.pub/document-structure/230531061054-92c79950ab3c66ab59051649467d831f/v1/568de6e791e67f198701088235f2d3bb.jpeg",
+            "https://read.cardtonic.com/wp-content/uploads/2022/09/Best-Gift-Cards-to-Sell-in-September-1.jpg",
+            "https://feeds.abplive.com/onecms/images/uploaded-images/2023/07/17/765caff05c0706404a333fd87661e4ed168960898370825_original.jpg?impolicy=abp_cdn&imwidth=1200",
+            "https://i.pcmag.com/imagery/roundup-groups/051b3JvCaz7TUe9VW12gb2m-6.fit_lim.size_1050x.jpg",
+            "https://images-cdn.ubuy.co.in/63507adfe1110518414398a2-board-game-set-deluxe-15-in-1-tabletop.jpg",
+            "https://rukminim2.flixcart.com/image/850/1000/l1l1rww0/chocolate/i/i/o/10-pure-vegatarian-handmade-sugar-free-fruit-nut-chocolates-pack-original-imagd4ynuss8wnz3.jpeg?q=20&crop=false",
+            "https://eatanytime.in/cdn/shop/articles/Diwali_Gift_Ideas_-_Eat_Anytime-693861.jpg?v=1704714056",
+            "https://5.imimg.com/data5/SELLER/Default/2023/4/303293605/NK/VM/RR/90035684/festivals-gift-hampers-500x500.jpg",
+            "https://www.angroos.com/wp-content/uploads/2022/08/001-3-scaled.jpg",
+            "https://www.goingnuts.in/wp-content/uploads/2019/01/22AUW19328121471_00873-scaled.jpg",
+            "https://www.eternalflowers.in/cdn/shop/files/FestiveAuraDiwaliGiftHamper_a.jpg?v=1698233455&width=1946",
+            "https://worldbranddesign.com/wp-content/uploads/2019/04/Oriental-Packing-Co.%2C-Ltd.---Full-Moon-Gathering-Gift-Box1.jpg",
+            "https://www.bhatiacane.com/wp-content/uploads/2024/02/61zejcDy3BL._SL1400_.jpg",
+            "https://www.sendbestgift.com/assets/images/product/bab669f1845648f15f641941b611589a.webp",
+            "https://www.fnp.com/images/pr/m/v300/radiant-festival-gift-set.jpg",
+            "https://res.cloudinary.com/interflora/f_auto,q_auto,t_pnopt9prodlp/products/p-maharanis-bagicha-334540-m.jpg",
+            "https://lmbsweets.com/wp-content/uploads/2022/10/LMB-2-1-140-1-600x600.jpg",
+            "https://www.saugatonline.com/products_image/7ce3cbd8b0d5884fa92b375864636119.jpg"
+        ];
+
+        const gallery = document.getElementById("gallery");
+
+        images.forEach(src => {
+            const img = document.createElement("img");
+            img.src = src;
+            img.alt = "Festival Gift"; // Added alt text for accessibility
+            gallery.appendChild(img);
+        });
+    </script>
+</body>
+</html>

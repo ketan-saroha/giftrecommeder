@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Gift Gallery</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8e24aa, #ff6f00); /* Creative and unique gradient */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Align items from the top */
+            min-height: 100vh;
+            margin: 0;
+            color: #fff;
+            overflow-x: hidden; /* Prevent horizontal scrollbar */
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px 30px;
+            border-radius: 10px;
+            margin-top: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            max-width: 1200px;
+            width: 95%;
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Subtle animation for the body background */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body {
+            background-size: 200% 200%;
+            animation: gradientAnimation 10s ease infinite;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>✨ Unique Personalized Gifts! 🎁</h1>
+        <p style="font-size: 1.1em; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);">Discover the joy of giving with our collection of personalized gifts.</p>
+    </header>
+    <div class="gallery" id="gallery"></div>
+
+    <script>
+        const images = [
+            "https://mishtigifts.com/wp-content/uploads/2024/06/womens-combo-4-in-1-min.jpg",
+            "https://www.tpcgifts.com/cdn/shop/products/Code-064.jpg?v=1674573138",
+            "https://mygifteee.com/cdn/shop/products/SizePlaque_10c7e6a0-216a-4f71-98a9-1473a5cab3a0.jpg?v=1658810338&width=1946",
+            "https://www.yourprint.in/new-admin-ajax/?action=generate_outer_image_via_design_templates&sku=1861625&dynDesID=cushion_square&cfcache=all",
+            "https://www.woodgeekstore.com/cdn/shop/products/Wooden_Journal_Custom_Engraved_With_Teacher_s_Name_-_Woodgeek_Store_600x.jpg?v=1723628002",
+            "https://m.media-amazon.com/images/I/81OUQ5QrbnL.jpg",
+            "https://m.media-amazon.com/images/I/81qBDth3D0L.jpg",
+            "https://platform.polygon.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25544296/arranger.jpg?quality=90&strip=all&crop=0,0,100,100",
+            "https://images.prismic.io/wonderbly/0e714bcf-0c9e-45d2-9251-7c1fdee1dcf1_TPW_ProductPage_Mobile_Carousel_05_Inside.jpg?auto=format%2Ccompress&dpr=&w=1100&h=&fit=&crop=&q=35&gif-q=90",
+            "https://5.imimg.com/data5/SELLER/Default/2021/1/UG/OZ/WW/47877594/handmade-graphite-portrait-sketch.jpg",
+            "https://thepreciousgifts.in/wp-content/uploads/2023/10/Personalized-Gift-Set-Diary-Pen-Keychain-Steel-Cup-Steel-Bottle-black.jpeg",
+            "https://hips.hearstapps.com/hmg-prod/images/personalised-gifts-1670128055.jpg",
+            "https://rkcustomisedgifts.com/wp-content/uploads/2024/01/cushion.png",
+            "https://vivagifts.in/wp-content/uploads/2023/06/Gift-box-set-10.0.jpg",
+            "https://lovingcrafts.in/cdn/shop/files/Miniature8.png?v=1710622291",
+            "https://www.usatoday.com/gcdn/presto/2020/09/18/USAT/e8388a57-647c-40bd-84a3-0b5e6067c1f0-Personalizedgifts2020_keychain.png",
+            "https://images.meesho.com/images/products/408553505/y5k0t_512.webp",
+            "https://thepreciousgifts.in/wp-content/uploads/2024/07/Personalized-eco-friendly-office-gift-set-with-cork-diary-wooden-travel-mug-desktop-name-plate-wooden-pen-pen-stand-and-paperweight.jpg",
+            "https://cdn.igp.com/f_auto,q_auto,t_pnopt9prodlp/products/p-personalized-love-and-smiles-hamper-397254-m.jpg",
+            "https://www.cyberkart.in/wp-content/uploads/2021/03/Personalized-Gift-MDF-Wall-Clock.jpg",
+            "https://cms.cloudinary.vpsvc.com/image/upload/c_scale,dpr_auto,f_auto,q_70,w_auto:50:550/India%20LOB/Personalised%20Mugs/Heart%20Cut%20Mug%20/IN_Heart_Cut_Mug_White_Overview",
+            "https://cdn.thewirecutter.com/wp-content/media/2023/10/personalizedgifts-2048px-2619-2x1-1.jpg?width=2048&quality=75&crop=2:1&auto=webp"
+        ];
+
+        const gallery = document.getElementById("gallery");
+
+        images.forEach(src => {
+            const img = document.createElement("img");
+            img.src = src;
+            img.alt = "Personalized Gift"; // Added alt text for accessibility
+            gallery.appendChild(img);
+        });
+    </script>
+</body>
+</html>

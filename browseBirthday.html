@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Gift Gallery</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Align items from the top */
+            min-height: 100vh;
+            margin: 0;
+            color: #fff;
+            overflow-x: hidden; /* Prevent horizontal scrollbar */
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px 30px;
+            border-radius: 10px;
+            margin-top: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            max-width: 1200px;
+            width: 95%;
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Subtle animation for the body background */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body {
+            background-size: 200% 200%;
+            animation: gradientAnimation 10s ease infinite;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎉 Celebrate with Joyful Gifts! 🎁</h1>
+        <p style="font-size: 1.1em; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);">Explore a delightful collection of birthday gift ideas!</p>
+    </header>
+    <div class="gallery" id="gallery"></div>
+
+    <script>
+        const images = [
+            "https://m.media-amazon.com/images/I/71Fp5iC1gvL._AC_UF1000,1000_QL80_.jpg",
+            "https://betweenboxes.in/cdn/shop/products/DrunkInLoveGiftHamperformen.jpg?v=1675073872",
+            "https://www.giftacrossindia.com/media/catalog/product/g/a/gaicom0480.jpg",
+            "https://www.angroos.com/wp-content/uploads/2022/05/IMG_2450.jpg",
+            "https://images.meesho.com/images/products/124425923/x1tpx_512.webp",
+            "https://primestore.co.in/cdn/shop/products/HAR00508.jpg?v=1681800550&width=1946",
+            "https://theperfect-present.com/wp-content/uploads/2021/04/mini-pamper-me-1-scaled.jpg",
+            "https://www.giftacrossindia.com/media/catalog/product/new/GAIPZ0044.jpg",
+            "https://assets.winni.in/product/primary/2022/4/59714.jpeg?dpr=1&w=500",
+            "https://silverleafshop.in/wp-content/uploads/2022/12/Happy-birthday-Lamp.jpeg",
+            "https://cdn2.1800baskets.com/wcsstore/Baskets/images/catalog/93234x.jpg?height=456&width=418&sharpen=a0.5,r1,t1&auto=webp",
+            "https://i.ytimg.com/vi/SCvs-J0zxD0/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLC58VPoqn2ZW9EueTni-ZxNguIdIQ",
+            "https://m.media-amazon.com/images/I/610OiiTm9PL.jpg",
+            "https://thebanyantee.com/cdn/shop/files/Navy-T-shirt.jpg?v=1721380366",
+            "https://m.media-amazon.com/images/I/51pycg0MGxL.jpg",
+            "https://i.ytimg.com/vi/pyxERBnjdAI/maxresdefault.jpg",
+            "https://bellavitaluxury.co.in/cdn/shop/files/13_ddbb0f0e-5f81-4de8-be8f-56ea862ee36c.jpg?v=1736920116&width=1000",
+            "https://www.southernliving.com/thmb/Le2vwhyZcet_qTBFNhg1bFDN26s=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/crop-GettyImages-165789335copy-fa4347a6012a434db3e34a227d3cc5e7.jpg",
+            "https://hips.hearstapps.com/hmg-prod/images/a-set-of-colorful-potted-plants-on-a-patterned-area-royalty-free-image-1716493110.jpg?crop=0.668xw:1.00xh;0.210xw,0&resize=1200:*",
+            "https://media.istockphoto.com/id/1170073824/photo/gamer-work-space-concept-top-view-a-gaming-gear-mouse-keyboard-joystick-headset-mobile.jpg?s=612x612&w=0&k=20&c=2d8z6CmJn6R1GaPpJ4HB4J43y4e0wOL4nusPM2Dhq34=",
+            "https://pyxis.nymag.com/v1/imgs/580/dfa/3fae83432d699d002dad345e2591e1ff4d.rsquare.w600.jpg",
+            "https://cdn.igp.com/f_auto,q_auto,t_pnopt19prodlp/products/p-personalized-led-frame-for-birthdays-177802-1.jpg",
+        ];
+
+        const gallery = document.getElementById("gallery");
+
+        images.forEach(src => {
+            const img = document.createElement("img");
+            img.src = src;
+            img.alt = "Birthday Gift"; // Added alt text for accessibility
+            gallery.appendChild(img);
+        });
+    </script>
+</body>
+</html>

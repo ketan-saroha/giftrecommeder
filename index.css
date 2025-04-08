@@ -1,0 +1,39 @@
+/* Add these to your existing CSS */
+.search-container {
+    position: relative;
+}
+
+.suggestions-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 0 0 var(--radius) var(--radius);
+    box-shadow: var(--shadow);
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+}
+
+.suggestion-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--dark);
+}
+
+.suggestion-item:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.dark-mode .suggestions-dropdown {
+    background: var(--dark);
+    border: 1px solid var(--gray);
+}
+
+.dark-mode .suggestion-item {
+    color: var(--light);
+}

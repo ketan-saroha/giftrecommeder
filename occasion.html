@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gift Gallery</title>
+    <style>
+        /* CSS styles remain the same as your original */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Align items from the top */
+            min-height: 100vh;
+            margin: 0;
+            color: #fff;
+            overflow-x: hidden; /* Prevent horizontal scrollbar */
+            background-size: 200% 200%;
+            animation: gradientAnimation 10s ease infinite;
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px 30px;
+            border-radius: 10px;
+            margin-top: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 90%; /* Ensure header doesn't get too wide */
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        header p { /* Added specificity */
+           font-size: 1.1em;
+           text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+           margin-top: 0;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            max-width: 1200px;
+            width: 95%;
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            margin-bottom: 40px; /* Add some space at the bottom */
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 id="pageTitle">Loading Gifts...</h1>
+        <p id="pageSubtitle">Please wait while we gather the perfect ideas.</p>
+    </header>
+    <div class="gallery" id="gallery">
+        </div>
+
+    <script>
+        // --- Data for Different Occasions ---
+        const occasionData = {
+            "birthday": {
+                title: "Birthday Gift Gallery",
+                headerText: "🎉 Celebrate with Joyful Gifts! 🎁",
+                subText: "Explore a delightful collection of birthday gift ideas!",
+                altText: "Birthday Gift",
+                images: [ // Your original birthday images
+                    "https://m.media-amazon.com/images/I/71Fp5iC1gvL._AC_UF1000,1000_QL80_.jpg", "https://betweenboxes.in/cdn/shop/products/DrunkInLoveGiftHamperformen.jpg?v=1675073872", "https://www.giftacrossindia.com/media/catalog/product/g/a/gaicom0480.jpg", "https://www.angroos.com/wp-content/uploads/2022/05/IMG_2450.jpg", "https://images.meesho.com/images/products/124425923/x1tpx_512.webp", "https://primestore.co.in/cdn/shop/products/HAR00508.jpg?v=1681800550&width=1946", "https://theperfect-present.com/wp-content/uploads/2021/04/mini-pamper-me-1-scaled.jpg", "https://www.giftacrossindia.com/media/catalog/product/new/GAIPZ0044.jpg", "https://assets.winni.in/product/primary/2022/4/59714.jpeg?dpr=1&w=500", "https://silverleafshop.in/wp-content/uploads/2022/12/Happy-birthday-Lamp.jpeg", "https://cdn2.1800baskets.com/wcsstore/Baskets/images/catalog/93234x.jpg?height=456&width=418&sharpen=a0.5,r1,t1&auto=webp", "https://i.ytimg.com/vi/SCvs-J0zxD0/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLC58VPoqn2ZW9EueTni-ZxNguIdIQ", "https://m.media-amazon.com/images/I/610OiiTm9PL.jpg", "https://thebanyantee.com/cdn/shop/files/Navy-T-shirt.jpg?v=1721380366", "https://m.media-amazon.com/images/I/51pycg0MGxL.jpg", "https://i.ytimg.com/vi/pyxERBnjdAI/maxresdefault.jpg", "https://bellavitaluxury.co.in/cdn/shop/files/13_ddbb0f0e-5f81-4de8-be8f-56ea862ee36c.jpg?v=1736920116&width=1000", "https://www.southernliving.com/thmb/Le2vwhyZcet_qTBFNhg1bFDN26s=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/crop-GettyImages-165789335copy-fa4347a6012a434db3e34a227d3cc5e7.jpg", "https://hips.hearstapps.com/hmg-prod/images/a-set-of-colorful-potted-plants-on-a-patterned-area-royalty-free-image-1716493110.jpg?crop=0.668xw:1.00xh;0.210xw,0&resize=1200:*", "https://media.istockphoto.com/id/1170073824/photo/gamer-work-space-concept-top-view-a-gaming-gear-mouse-keyboard-joystick-headset-mobile.jpg?s=612x612&w=0&k=20&c=2d8z6CmJn6R1GaPpJ4HB4J43y4e0wOL4nusPM2Dhq34=", "https://pyxis.nymag.com/v1/imgs/580/dfa/3fae83432d699d002dad345e2591e1ff4d.rsquare.w600.jpg", "https://cdn.igp.com/f_auto,q_auto,t_pnopt19prodlp/products/p-personalized-led-frame-for-birthdays-177802-1.jpg"
+                ]
+            },
+            "anniversary": {
+                title: "Anniversary Gift Gallery",
+                headerText: "💖 Celebrate Your Love Story! 🥂",
+                subText: "Find the perfect gifts to cherish your special milestone.",
+                altText: "Anniversary Gift",
+                images: [ // Add actual Anniversary gift image URLs here
+                    "https://m.media-amazon.com/images/I/51+1q01Y8sL._AC_UY1100_.jpg",
+                    "https://m.media-amazon.com/images/I/81l1z71IJNL._AC_UF1000,1000_QL80_.jpg",
+                    "https://i.etsystatic.com/11466213/r/il/7c8145/2811645082/il_fullxfull.2811645082_h7y8.jpg",
+                    "https://www.theknot.com/tk-media/images/a1c8c7e8-41d5-4074-874a-a4103e77dd8c~rs_768.h",
+                    "https://media.timeout.com/images/106049121/750/422/image.jpg",
+                    "https://pyxis.nymag.com/v1/imgs/b7a/064/63197ef20fc05b62a028c35779d4c79231.rsquare.w600.jpg"
+                    // ... more anniversary images
+                ]
+            },
+            "festival": {
+                title: "Festival Gift Gallery",
+                headerText: "✨ Festive Gifts for Every Celebration! 🎉",
+                subText: "Discover bright and cheerful gifts for the festive season.",
+                altText: "Festival Gift",
+                images: [ // Add actual Festival gift image URLs here
+                     "https://rukminim2.flixcart.com/image/850/1000/xif0q/showpiece-figurine/n/a/a/11-1-polyresin-beautiful-laughing-buddha-idol-showpiece-for-original-imaghxzgfxvhhpzb.jpeg?q=90&crop=false",
+                     "https://images-cdn.ubuy.co.in/634e2ee3b181415c98746477-indian-beautiful-antique-diwali-gifts.jpg",
+                     "https://www.fnp.com/assets/images/custom/decor-gifts/plants/Peace-Lily-Plant-In-A-Plastic-Pot.jpg",
+                     "https://assets.winni.in/product/primary/2023/10/89503.jpeg?dpr=1&w=500",
+                     "https://floweraura-prod-bucket.s3.amazonaws.com/catalog/product/cache/1/image/600x600/9df78eab33525d08d6e5fb8d27136e95/p/e/personalised-led-magic-mirror-9811180gf-AA.jpg"
+                    // ... more festival images
+                ]
+            },
+            "personalized": {
+                title: "Personalized Gift Gallery",
+                headerText: "🎁 Gifts Made Uniquely Yours! ✨",
+                subText: "Explore custom gifts crafted with a personal touch.",
+                altText: "Personalized Gift",
+                images: [ // Add actual Personalized gift image URLs here
+                    "https://m.media-amazon.com/images/I/51XvjUYZuuL._AC_UF1000,1000_QL80_.jpg",
+                    "https://www.theknot.com/tk-media/images/02d7f265-3176-4d45-b7f0-2664c82fa878~rs_768.h",
+                    "https://i.etsystatic.com/18526388/r/il/038f8d/3362279578/il_570xN.3362279578_28z3.jpg",
+                    "https://www.weddingomania.com/images/2019/11/18-a-chic-personalized-wedding-gift-with-a-mug-coffee-beans-cookies-and-a-customized-wooden-box.jpg",
+                    "https://cdn.igp.com/f_auto,q_auto,t_prodm/products/p-personalized-led-bottle-lamp-with-photo-138653-m.jpg"
+                    // ... more personalized images
+                ]
+            },
+            "home": { // Could be for Housewarming, Home Decor etc.
+                title: "Home & Living Gift Gallery",
+                headerText: "🏡 Gifts to Make a House a Home! 🪴",
+                subText: "Find thoughtful presents for housewarmings or home decor lovers.",
+                altText: "Home Gift",
+                images: [ // Add actual Home gift image URLs here
+                     "https://nestasia.in/cdn/shop/products/NITA11249_1.jpg?v=1677675716&width=2000",
+                     "https://www.ikea.com/in/en/images/products/fejka-artificial-potted-plant-with-pot-in-outdoor-monstera__0614210_pe686832_s5.jpg?f=s",
+                     "https://ii1.pepperfry.com/media/catalog/product/a/r/494x544/art-street-synthetic-wall-photo-frame-set-of-8-individual-frames-art-street-synthetic-wall-photo-f-n18w39.jpg",
+                     "https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1697642156-screen-shot-2023-10-18-at-11-15-02-am-652fe8ec51974.png?crop=1xw:1xh;center,top&resize=980:*",
+                     "https://www.fnp.com/images/pr/l/v20220718121308/wooden-engraved-photo-frame-for-home_1.jpg"
+                    // ... more home images
+                ]
+            },
+            // --- Default/Fallback Data ---
+             "unknown": {
+                title: "Gift Gallery",
+                headerText: "Please ask to ChatBot",
+                subText: "ChatBot open for you",
+                altText: "Gift",
+                images: [ // Generic placeholder images or maybe some popular items
+                    // "https://via.placeholder.com/250/CCCCCC/FFFFFF?text=Gift+Idea+1",
+                    // "https://via.placeholder.com/250/AAAAAA/FFFFFF?text=Gift+Idea+2",
+                    // "https://via.placeholder.com/250/999999/FFFFFF?text=Gift+Idea+3",
+                    // "https://via.placeholder.com/250/888888/FFFFFF?text=Gift+Idea+4"
+                 ]
+            }
+        };
+
+        // --- Function to Update Page Content ---
+        function displayOccasionGallery() {
+            // 1. Get Occasion from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            let occasion = urlParams.get('occasion'); // Get the value of 'occasion' parameter
+
+            // 2. Normalize Occasion Name
+            // Default to 'unknown' if parameter is missing or empty
+            const normalizedOccasion = occasion ? occasion.trim().toLowerCase() : 'unknown';
+
+            // 3. Get Data for the Occasion (or fallback to 'unknown')
+            const currentOccasionData = occasionData[normalizedOccasion] || occasionData.unknown;
+
+            // 4. Update Page Elements
+            document.title = currentOccasionData.title; // Set browser tab title
+
+            const pageTitleElement = document.getElementById('pageTitle');
+            const pageSubtitleElement = document.getElementById('pageSubtitle');
+            const galleryElement = document.getElementById('gallery');
+
+            if (pageTitleElement) {
+                pageTitleElement.textContent = currentOccasionData.headerText;
+            }
+            if (pageSubtitleElement) {
+                pageSubtitleElement.textContent = currentOccasionData.subText;
+            }
+
+            // 5. Populate Gallery
+            if (galleryElement) {
+                galleryElement.innerHTML = ''; // Clear any previous content (like the loading message)
+
+                currentOccasionData.images.forEach(src => {
+                    const img = document.createElement("img");
+                    img.src = src;
+                    img.alt = currentOccasionData.altText; // Use dynamic alt text
+                    // Add error handling for broken images (optional but good)
+                    img.onerror = function() {
+                        this.alt = `Error loading ${currentOccasionData.altText}`;
+                        // Optionally replace with a placeholder image on error
+                        // this.src = 'path/to/placeholder.png';
+                        console.warn(`Failed to load image: ${src}`);
+                    };
+                    galleryElement.appendChild(img);
+                });
+            } else {
+                console.error("Gallery element not found!");
+            }
+        }
+
+        // --- Run the function when the page loads ---
+        // Using DOMContentLoaded ensures the HTML is ready before the script runs
+        document.addEventListener('DOMContentLoaded', displayOccasionGallery);
+
+    </script>
+</body>
+</html>

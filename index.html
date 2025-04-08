@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GiftFinder - Perfect Gift Recommendations</title>
+    <style>
+        :root {
+            --primary: #ff6b6b;
+            --secondary: #4ecdc4;
+            --dark: #292f36;
+            --light: #f0ecec;
+            --gray: #a6a6a6;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --primary: #ff8e8e;
+            --secondary: #5ae0d7;
+            --dark: #f7f7f7;
+            --light: #292f36;
+            --gray: #d4d4d4;
+            --shadow: 0 4px 6px rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            transition: var(--transition);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            width: min(100% - 40px, 1200px);
+            margin-inline: auto;
+            padding: 0 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+
+        .giftlogo{
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .theme-toggle {
+            background: var(--dark);
+            color: var(--light);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border-radius: var(--radius);
+            margin-bottom: 40px;
+            width: 100%;
+        }
+
+        .hero h1 {
+            font-size: clamp(28px, 5vw, 42px);
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease;
+        }
+
+        .hero p {
+            font-size: clamp(16px, 3vw, 18px);
+            max-width: 700px;
+            margin-bottom: 30px;
+            animation: fadeIn 1.2s ease;
+            padding: 0 10px;
+            line-height: 1.6;
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+            animation: fadeIn 1.4s ease;
+            padding: 0 10px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 16px 50px 16px 24px; /* Adjusted padding for button */
+            border-radius: 50px;
+            border: none;
+            font-size: 16px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .search-bar:focus {
+            outline: none;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .search-button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary);
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        .search-button:hover {
+            background: #ff5252;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .search-results {
+            list-style: none;
+            max-height: 300px;
+            overflow-y: auto;
+            border-radius: 0.25rem;
+            background: var(--light);
+            color: var(--dark);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+            width: 100%;
+            max-width: 600px;
+            padding: 0;
+            position: absolute; /* Position results below input */
+            top: 100%;
+            left: 0;
+            z-index: 10; /* Ensure it's above other content */
+        }
+
+        .dark-mode .search-results {
+            background: var(--dark);
+            color: var(--light);
+            box-shadow: 0 2px 4px rgba(255, 255, 255, 0.05);
+        }
+
+        .result-item {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 1px solid var(--gray);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .dark-mode .result-item {
+            border-bottom-color: var(--d4d4d4);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-item:hover,
+        .result-item.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .no-results {
+            padding: 0.75rem;
+            text-align: center;
+            color: #6c757d;
+        }
+
+        .dark-mode .no-results {
+            color: #d4d4d4;
+        }
+
+        /* Categories Section */
+        .section-title {
+            font-size: clamp(22px, 4vw, 28px);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            color: rgb(111, 86, 86);
+        }
+
+        .section-para{
+            color: black;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            margin: 12px auto;
+            border-radius: 4px;
+        }
+
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: clamp(10px, 2vw, 20px);
+            margin-bottom: 60px;
+        }
+
+        .category {
+            background: white;
+            border-radius: var(--radius);
+            padding: clamp(15px, 3vw, 20px);
+            width: clamp(120px, 20vw, 180px);
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            cursor: pointer;
+        }
+
+        .category:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-icon {
+            font-size: clamp(24px, 5vw, 36px);
+            margin-bottom: 12px;
+            color: var(--primary);
+        }
+
+        .category h3 {
+            font-size: clamp(14px, 2.5vw, 16px);
+            margin-bottom: 8px;
+        }
+
+        .dark-mode .category {
+            background: var(--dark);
+            color: var(--light);
+        }
+
+        /* Chat Section */
+        .chat-section {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: clamp(25px, 5vw, 40px);
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            animation: fadeIn 1.2s ease;
+            width: 100%;
+        }
+
+        .dark-mode .chat-section {
+            background: var(--dark);
+        }
+
+        .chat-section p {
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-inline: auto;
+            line-height: 1.6;
+            font-size: clamp(14px, 2.5vw, 16px);
+        }
+
+        .start-chat-button {
+            background: linear-gradient(135deg, var(--primary) 0%, #4e4c4c 100%);
+            color: white;
+            border: none;
+            padding: clamp(12px, 3vw, 16px) clamp(20px, 4vw, 36px);
+            font-size: clamp(16px, 2.5vw, 18px);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-inline: auto;
+        }
+
+        .start-chat-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .start-chat-icon {
+            font-size: clamp(18px, 3vw, 20px);
+        }
+
+        .chatbot{
+            padding-top: 7px;
+            margin-right: 20px;
+            margin-left: -10px;
+            width: 40px;
+            height: 40px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: var(--light);
+            padding: 40px 0 20px;
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .foothead{
+            color: rgb(218, 214, 214);
+            font-weight: 700;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 20px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 15px;
+            font-size: clamp(16px, 2.5vw, 18px);
+        }
+
+        .footer-section p, .footer-section a {
+            color: var(--gray);
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: clamp(14px, 2vw, 16px);
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .parafoot{
+            font-weight: 100;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 20px;
+            color: var(--gray);
+            font-size: clamp(12px, 2vw, 14px);
+        }
+
+        .dark-mode footer {
+            background: #1a1a1a;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design - Enhanced */
+        @media (max-width: 992px) {
+            .footer-content {
+                justify-content: flex-start;
+            }
+
+            .footer-section {
+                flex-basis: calc(50% - 30px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .search-button {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+
+            .chat-section {
+                padding: 25px 15px;
+            }
+
+            .start-chat-button {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            header {
+                justify-content: center;
+            }
+
+            .hero {
+                padding: 40px 10px;
+            }
+
+            .search-container {
+                padding: 0 5px;
+            }
+
+            .search-bar {
+                padding: 12px 20px;
+                padding-right: 80px;
+                font-size: 14px;
+            }
+
+            .search-button {
+                right: 5px;
+                padding: 6px 12px;
+            }
+
+            .footer-section {
+                flex-basis: 100%;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .category {
+                width: calc(50% - 10px);
+                min-width: 100px;
+                padding: 10px;
+            }
+
+            .categories {
+                gap: 10px;
+            }
+        }
+    </style>
+    <link rel="shortcut icon"  href="chatbot_favi.png" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <img class="giftlogo" src="gift_new.png" alt="GiftFinder Logo">
+                GiftFinder
+            </div>
+            <button class="theme-toggle" id="theme-toggle">
+                <span id="toggle-icon">🌙</span> Dark Mode
+            </button>
+        </header>
+
+        <section class="hero">
+            <h1>Find the Perfect Gift</h1>
+            <p>Discover thoughtful, personalized gifts for every occasion, person, and relationship in your life.</p>
+            <div class="search-container">
+                <input
+                    type="search"
+                    id="search-input"
+                    class="search-bar"
+                    placeholder="Enter occasion name..."
+                    autocomplete="off"
+                    aria-label="Search occasions"
+                >
+                <button class="search-button" id="search-button">Search</button>
+                <ul id="search-results" class="search-results" role="listbox"></ul>
+            </div>
+        </section>
+
+        <section class="categories-section">
+            <h2 class="section-title">Browse by Category</h2>
+            <div class="categories">
+                <div class="category" data-category="birthday">
+                    <div class="category-icon">🎂</div>
+                    <h3>Birthday</h3>
+                </div>
+                <div class="category" data-category="anniversary">
+                    <div class="category-icon">💍</div>
+                    <h3>Anniversary</h3>
+                </div>
+                <div class="category" data-category="festivals">
+                    <div class="category-icon">🎄</div>
+                    <h3>Festivals</h3>
+                </div>
+                <div class="category" data-category="personalized">
+                    <div class="category-icon">✨</div>
+                    <h3>Personalized</h3>
+                </div>
+                <div class="category" data-category="home">
+                    <div class="category-icon">🏠</div>
+                    <h3>Home</h3>
+                </div>
+            </div>
+        </section>
+
+        <section class="chat-section">
+            <h2 class="section-title">Not Sure What to Get?</h2>
+            <p class="section-para">Our AI-powered gift assistant can help you find the perfect present. Tell us about who you're shopping for, their interests, the occasion, and your budget, and we'll suggest tailored gift ideas just for you.</p>
+            <button class="start-chat-button" id="start-chat-button">
+                <span class="start-chat-icon">
+                    <img class="chatbot" src="chatbot.png" alt="Chatbot Icon">
+                </span> Start Chat
+            </button>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="foothead">GiftFinder</h3>
+                    <p class="parafoot">Wrapped with Love, Given with Joy! 🎁✨</p>
+                </div>
+                <div class="footer-section">
+                    <h3 class="foothead">Quick Links</h3>
+                    <a href="#" class="parafoot">Home</a>
+                    <a href="#" class="parafoot">Categories</a>
+                    <a href="#" class="parafoot">Gift Ideas</a>
+                    <a href="#" class="parafoot">Occasions</a>
+                </div>
+                <div class="footer-section">
+                    <h3 class="foothead">Contact Us</h3>
+                    <p class="parafoot">Email: hello@giftfinder.com</p>
+                    <p class="parafoot">Phone: (555) 123-4567</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 GiftFinder. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dark Mode Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const toggleIcon = document.getElementById('toggle-icon');
+
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            toggleIcon.textContent = '☀️';
+            themeToggle.textContent = ' Light Mode';
+            themeToggle.prepend(toggleIcon);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                toggleIcon.textContent = '☀️';
+                themeToggle.textContent = ' Light Mode';
+                themeToggle.prepend(toggleIcon);
+                localStorage.setItem('theme', 'dark');
+            } else {
+                toggleIcon.textContent = '🌙';
+                themeToggle.textContent = ' Dark Mode';
+                themeToggle.prepend(toggleIcon);
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeIn 0.8s ease forwards';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        document.querySelectorAll('.section-title, .category, .chat-section').forEach(element => {
+            observer.observe(element);
+            element.style.opacity = '0'; // Reset animation initially
+        });
+
+        // Start Chat button functionality
+        const startChatButton = document.getElementById('start-chat-button');
+            startChatButton.addEventListener('click', () => {
+                window.location.href = 'birthday.html'; // Redirects to birthday.html
+            });
+
+        // Category selection and navigation
+        const categories = document.querySelectorAll('.category');
+        categories.forEach(category => {
+            category.addEventListener('click', () => {
+                const categoryName = category.dataset.category;
+                let targetURL = '';
+
+                switch (categoryName) {
+                    case 'birthday':
+                        targetURL = 'browseBirthday.html';
+                        break;
+                    case 'anniversary':
+                        targetURL = 'browseAnniversary.html';
+                        break;
+                    case 'festivals':
+                        targetURL = 'browseFestival.html';
+                        break;
+                    case 'personalized':
+                        targetURL = 'browsePersonilized.html';
+                        break;
+                    case 'home':
+                        targetURL = 'browseHome.html';
+                        break;
+                    default:
+                        console.log('Unknown category:', categoryName);
+                        return; // Exit if the category is not recognized
+                }
+
+                window.location.href = targetURL;
+            });
+        });
+
+        // Occasion Search Functionality
+        class OccasionSearch {
+            constructor() {
+                this.occasions = [
+                    "Birthday", "Anniversary", "Housewarming", "Retirement", "Graduation",
+                    "New Job", "Promotion", "Farewell", "New Baby", "Baby Shower",
+                    "Gender Reveal", "Engagement", "Wedding", "Bridal Shower",
+                    "Bachelor Party", "Bachelorette Party", "Reunion", "First Home",
+                    "Moving Away", "New Year", "Milestone Celebration", "Christmas",
+                    "Easter", "Good Friday", "Palm Sunday", "Advent", "St. Patrick's Day",
+                    "All Saints' Day", "All Souls' Day", "Ash Wednesday", "Diwali",
+                    "Holi", "Makar Sankranti", "Navratri", "Dussehra", "Janmashtami",
+                    "Raksha Bandhan", "Karva Chauth", "Pongal", "Onam", "Ugadi",
+                    "Gudi Padwa", "Akshaya Tritiya", "Bhai Dooj", "Eid al-Fitr",
+                    "Ramadan", "Chinese New Year", "Mother's Day", "Father's Day",
+                    "Grandparents' Day", "Siblings Day", "Brother's Day", "Sister's Day",
+                    "Teacher's Day", "Boss's Day", "Valentine's Day", "Friendship Day",
+                    "Children's Day", "International Men's Day", "International Women's Day",
+                    "Thanksgiving", "Work Anniversary", "Company Anniversary",
+                    "Team Achievement Celebration", "Baby's First Birthday", "Naming Ceremony"
+                ];
+
+                this.searchInput = document.getElementById('search-input');
+                this.searchButton = document.getElementById('search-button');
+                this.resultsContainer = document.getElementById('search-results');
+                this.selectedIndex = -1;
+                this.resultsVisible = false;
+
+                this.bindEvents();
+            }
+
+            bindEvents() {
+                this.searchInput.addEventListener('input', this.debounce(this.handleSearch.bind(this), 250));
+                this.searchInput.addEventListener('focus', this.handleSearch.bind(this)); // Show results on focus if not empty
+                this.searchButton.addEventListener('click', this.handleSearchSubmit.bind(this));
+                document.addEventListener('keydown', this.handleKeyboardNavigation.bind(this));
+                document.addEventListener('click', this.handleClickOutside.bind(this));
+            }
+
+            handleSearch() {
+                const query = this.searchInput.value.trim().toLowerCase();
+                const results = query ? this.searchOccasions(query) : [];
+                this.displayResults(results);
+                this.resultsVisible = results.length > 0;
+            }
+
+            handleSearchSubmit() {
+                const query = this.searchInput.value.trim();
+                if (query) {
+                    window.location.href = `search-results.html?query=${encodeURIComponent(query)}`;
+                    // In a real app, this would navigate to a page displaying search results
+                } else {
+                    this.searchInput.placeholder = 'Please enter a search term';
+                    this.searchInput.classList.add('shake');
+                    setTimeout(() => this.searchInput.classList.remove('shake'), 500);
+                }
+            }
+
+            searchOccasions(query) {
+                return this.occasions
+                    .filter(occasion => occasion.toLowerCase().includes(query))
+                    .slice(0, 10); // Limit to 10 suggestions
+            }
+
+            displayResults(results) {
+                this.resultsContainer.innerHTML = '';
+                this.selectedIndex = -1;
+
+                if (results.length === 0) {
+                    this.resultsContainer.classList.remove('active');
+                    this.resultsVisible = false;
+                    return;
+                }
+
+                results.forEach((result, index) => {
+                    const li = document.createElement('li');
+                    li.textContent = result;
+                    li.classList.add('result-item');
+                    li.setAttribute('role', 'option');
+                    li.addEventListener('click', () => this.navigateToOccasion(result));
+                    this.resultsContainer.appendChild(li);
+                });
+                this.resultsContainer.classList.add('active');
+                this.resultsVisible = true;
+            }
+
+            navigateToOccasion(occasion) {
+                window.location.href = `occasion.html?occasion=${encodeURIComponent(occasion)}`;
+                this.searchInput.value = occasion;
+                this.displayResults([]);
+                this.resultsVisible = false;
+            }
+
+            handleKeyboardNavigation(event) {
+                const items = this.resultsContainer.querySelectorAll('.result-item');
+
+                if (!this.resultsVisible || items.length === 0) return;
+
+                switch (event.key) {
+                    case 'ArrowDown':
+                        this.selectedIndex = (this.selectedIndex + 1) % items.length;
+                        break;
+                    case 'ArrowUp':
+                        this.selectedIndex = (this.selectedIndex - 1 + items.length) % items.length;
+                        break;
+                    case 'Enter':
+                        if (this.selectedIndex >= 0) {
+                            items[this.selectedIndex].click();
+                        }
+                        event.preventDefault();
+                        break;
+                    case 'Escape':
+                        this.displayResults([]);
+                        this.resultsVisible = false;
+                        break;
+                    default:
+                        return;
+                }
+
+                items.forEach((item, index) => {
+                    item.classList.toggle('active', index === this.selectedIndex);
+                });
+            }
+
+            handleClickOutside(event) {
+                if (this.resultsVisible && !this.searchInput.contains(event.target) && !this.searchButton.contains(event.target) && !this.resultsContainer.contains(event.target)) {
+                    this.displayResults([]);
+                    this.resultsVisible = false;
+                }
+            }
+
+            debounce(func, delay) {
+                let timeout;
+                return function() {
+                    const context = this;
+                    const args = arguments;
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(context, args), delay);
+                };
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new OccasionSearch();
+        });
+
+        // Shake animation style (moved here for better organization)
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-5px); }
+                50% { transform: translateX(5px); }
+                75% { transform: translateX(-5px); }
+            }
+            .shake {
+                animation: shake 0.5s ease;
+            }
+            .search-results.active {
+                border: 1px solid var(--gray); /* Add border when results are active */
+                border-top: none;
+            }
+            .dark-mode .search-results.active {
+                border-color: var(--d4d4d4);
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Smooth resize handling (no changes needed but kept for completeness)
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            document.body.classList.add('resize-animation-stopper');
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                document.body.classList.remove('resize-animation-stopper');
+            }, 400);
+        });
+
+        const resizeStyle = document.createElement('style');
+        resizeStyle.textContent = `
+            .resize-animation-stopper * {
+                transition: none !important;
+            }
+        `;
+        document.head.appendChild(resizeStyle);
+    </script>
+</body>
+</html>

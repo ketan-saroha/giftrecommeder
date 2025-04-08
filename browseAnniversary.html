@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anniversary Gift Gallery</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f06292, #9575cd); /* Medium lightness romantic gradient */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Align items from the top */
+            min-height: 100vh;
+            margin: 0;
+            color: #fff; /* White text for good contrast on this background */
+            overflow-x: hidden; /* Prevent horizontal scrollbar */
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.15); /* Slightly more opaque header */
+            padding: 20px 30px;
+            border-radius: 10px;
+            margin-top: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Slightly more pronounced shadow */
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Slightly more pronounced text shadow */
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            max-width: 1200px;
+            width: 95%;
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.25); /* Slightly more opaque gallery */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Slightly more pronounced shadow */
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* A bit more shadow */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* More pronounced hover shadow */
+        }
+
+        /* Subtle animation for the body background */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body {
+            background-size: 200% 200%;
+            animation: gradientAnimation 10s ease infinite;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>❤️ Celebrate Your Anniversary! 🥂</h1>
+        <p style="font-size: 1.1em; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);">Explore heartwarming anniversary gift ideas for your loved one.</p>
+    </header>
+    <div class="gallery" id="gallery"></div>
+
+    <script>
+        const images = [
+            "https://img1.exportersindia.com/product_images/bc-full/2019/7/4782861/birthday-gift-1563442524-5003965.jpeg",
+            "https://m.media-amazon.com/images/I/51+1q01Y8sL._AC_UY1100_.jpg",
+            "https://www.images.photojaanic.com/in/2022/productpage/photobooks/weddingbook/wedding-1.jpg",
+            "https://cdn.shopify.com/s/files/1/1487/8740/files/Love_You_Always_Jar_of_Notes_a7d159e2-4033-4301-b1f0-2bf55e0cd0ac_480x480.png?v=1709783951",
+            "https://ritwikas.com/cdn/shop/files/2_413a25b0-206d-4ede-8849-df6a991edc3a.webp?v=1695708315",
+            "https://m.media-amazon.com/images/I/617iN+TXa4L._SL1000_.jpg",
+            "https://www.soundwavepic.com/wp-content/uploads/2021/09/27-feb-mockup-scaled-1.jpg",
+            "https://i.etsystatic.com/9489093/r/il/72ada8/3465089988/il_fullxfull.3465089988_4c6l.jpg",
+            "https://blog.thomascook.in/wp-content/uploads/2017/01/weekend-getaway-india-travel.jpg",
+            "https://m.media-amazon.com/images/I/71PAYlAlxoL._AC_UY1100_.jpg",
+            "https://m.media-amazon.com/images/I/71OIzmIoNnL.jpg",
+            "https://rukminim3.flixcart.com/image/850/1000/xif0q/wall-decoration/w/j/w/couples-wedding-or-anniversary-gift-for-every-special-occasion-1-original-imagzy8ggh6ykvk7.jpeg?q=90&crop=false",
+            "https://assets.winni.in/groot/2022/10/19/mobile/combos.jpg",
+            "https://giftkyade.com/cdn/shop/files/happyanniversaryPF_lifestyle1_logo-533077.jpg?v=1723884935",
+            "https://hips.hearstapps.com/hmg-prod/images/34-best-4-year-anniversary-gift-ideas-for-when-you-re-totally-out-of-ideas-64f8e7fd47ce7-1-65d7b9a5b33cc.png?crop=0.8933333333333333xw:1xh;center,top&resize=1200:*",
+            "https://www.titanencircle.com/store/media/giftcard/template/main/g/i/gift-card-designs-web_anniversary_v1_1.jpg",
+            "https://www.zestpics.com/cdn/shop/products/1stAnniversaryGiftforHusband.jpg?v=1624583348&width=1080",
+            "https://www.brides.com/thmb/Z-gdZk8lH6uNbmdsluNl6wnlcY0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/anniversary-gifts-by-year-jewelry-box-recirc-0424-e605715b6cd44b7284bfcf1eb3067c5f.png",
+            "https://www.zwende.com/cdn/shop/products/Ashie_Artworks_Homeware_Mugs_Yellow_Couple_Src_6.jpg?v=1659359008&width=900",
+            "https://cdn.moolwan.com/326048-Best-couple-statue-for-anniversary-gift-shopping-with-yellow-and-blue-couple-statue-and-pink-teddy.jpg",
+            "https://images.meesho.com/images/products/391842782/b3p1l_512.webp",
+            "https://www.woodgeekstore.com/cdn/shop/products/wooden-flower-set-of-2-anniversary-woodgeekstore_1200x.jpg?v=1610824673"
+        ];
+
+        const gallery = document.getElementById("gallery");
+
+        images.forEach(src => {
+            const img = document.createElement("img");
+            img.src = src;
+            img.alt = "Anniversary Gift"; // Added alt text for accessibility
+            gallery.appendChild(img);
+        });
+    </script>
+</body>
+</html>
